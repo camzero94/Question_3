@@ -11,5 +11,5 @@ COPY . /app
 EXPOSE 5000
 
 # Command to run when the container starts
-CMD ["python", "main.py"]
+CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "5000"]
 

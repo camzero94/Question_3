@@ -1,24 +1,23 @@
-from flask import Flask, jsonify, request
+from fastapi import FastAPI, Depends 
 from typing import Optional
-from flask_pydantic import validate
-from schemas.schemas_greet import GreetRequest
+from schemas.schemas_greet import GreetRequest, GreetResponse
 import os
+import uvicorn
 
-app = Flask(__name__)
 
-@app.route('/greet', methods=['GET'])
-@validate(query=GreetRequest)
-def greet():
+app = FastAPI()
+
+@app.get('/greet')
+async def greet(query_params: GreetRequest = Depends(GreetRequest)) -> GreetResponse:
     """
     Greet a user with a message.
     Validate request query parameters and response body.
     """
-    name = request.args.get('name')
-    if name is None:
-        return jsonify({'message': 'Hello, World!'})
-    return jsonify({'message': f'Hello, {name}!'})
+    name = query_params.name
+    if name is None or name == '':
+        return GreetResponse(message='Hello, World!')
+    return GreetResponse(message=f'Hello, {name}!')
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True, host='0.0.0.0',port=port)
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=5000)
 

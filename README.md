@@ -39,34 +39,39 @@ curl -X GET "http://localhost:5000/greet?name=Camilo"
 
 ### Description and directory  structure 
 ```sh
+├── Dockerfile
 ├── README.md
-├── docker-compose.yml
+├── __init__.py
+├── docker-compose.yaml
 ├── main.py
 ├── media
-│   └── rabbitmq.gif
-├── open_env
-│   ├── bin
-│   ├── include
-│   ├── lib
-│   └── pyvenv.cfg
-└── requirements.txt
+│   └── api.gif
+├── requirements.txt
+└── schemas
+    ├── __init__.py
+    ├── __pycache__
+    └── schemas_greet.py
 
-6 directories, 6 files
+4 directories, 9 files
 ```
-**Setup Rabbitmq**:
-- Exchange: is set to default. It means that the routing key will match with the queue name. 
-- Queue: The queue is named "test_queue" and it is durable. It means that the queue will survive a broker restart.
-- ack: The message is acknowledged by the consumer. It means that the message is removed from the queue when the consumer receives it.
-- Channel management: The channel is closed after the message is sent. And each function send_message() and consume_message() creates a new channel. **Multiplexing happens** 
 
 ### Requirements.txt
 ```sh
-pika==1.3.2
+annotated-types==0.7.0
+blinker==1.9.0
+click==8.1.7
+Flask==3.1.0
+Flask-Pydantic==0.12.0
+itsdangerous==2.2.0
+Jinja2==3.1.4
+MarkupSafe==3.0.2
+pydantic==2.10.3
+pydantic_core==2.27.1
+typing_extensions==4.12.2
+Werkzeug==3.1.3
 ```
 
 ## Some considerations 
 
-When sending the message the connection is close. It is a good practice to close the connection after the message is sent. 
-
-When consuming the message the program hang so the user can decide to exit by pressing Ctrl + C. This is because I want to show the message is consumed only once and the queue is empty.
-
+For this simple API I decided to use Flask and Pydantic to validate the input.
+When the API request is made, the input is validated by the Pydantic schema and if the input is not valid, the API will return a 404 status code not found the URL.
