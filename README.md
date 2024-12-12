@@ -58,20 +58,24 @@ curl -X GET "http://localhost:5000/greet?name=Camilo"
 ### Requirements.txt
 ```sh
 annotated-types==0.7.0
-blinker==1.9.0
+anyio==4.7.0
 click==8.1.7
-Flask==3.1.0
-Flask-Pydantic==0.12.0
-itsdangerous==2.2.0
-Jinja2==3.1.4
-MarkupSafe==3.0.2
+fastapi==0.115.6
+h11==0.14.0
+idna==3.10
 pydantic==2.10.3
 pydantic_core==2.27.1
+sniffio==1.3.1
+starlette==0.41.3
 typing_extensions==4.12.2
-Werkzeug==3.1.3
+uvicorn==0.32.1
 ```
 
 ## Some considerations 
 
-For this simple API I decided to use Flask and Pydantic to validate the input.
-When the API request is made, the input is validated by the Pydantic schema and if the input is not valid, the API will return a 404 status code not found the URL.
+For this simple API I decided to use FastAPI and Pydantic to validate the input.
+When the API request is made, the input is validated by the Pydantic schema (in this case does not matter because it will only return "Hello World!" if it has a query parameter) and if the response is not valid will return an invalid format message.o
+
+I we hit a wrong endpoint we will get a 404 "Not Found" error.
+
+I choose fast API mainly because we can see the shape of the request and responses and many other utilities in <id host>:<port>/docs
